@@ -51,6 +51,8 @@ class GoTrueClient {
 
   late bool _autoRefreshToken;
 
+  bool _autoRefreshOn = true;
+
   Timer? _autoRefreshTicker;
 
   /// Completer to combine multiple simultaneous token refresh requests.
@@ -1007,6 +1009,8 @@ class GoTrueClient {
       (Timer t) => _autoRefreshTokenTick(),
     );
 
+    _autoRefreshOn = true;
+
     await Future.delayed(Duration.zero);
     await _autoRefreshTokenTick();
   }
@@ -1015,10 +1019,11 @@ class GoTrueClient {
   void stopAutoRefresh() {
     _autoRefreshTicker?.cancel();
     _autoRefreshTicker = null;
+    _autoRefreshOn = false
   }
 
   Future<void> _autoRefreshTokenTick() async {
-    if (_autoRefreshTicker != null && !_autoRefreshTicker!.isActive) return;
+    if (!_autoRefreshOn) return;
     
     try {
       final now = DateTime.now();
@@ -1038,6 +1043,8 @@ class GoTrueClient {
                       .inMilliseconds /
                   Constants.autoRefreshTickDuration.inMilliseconds)
               .floor();
+
+      print('🐹 ABOUT TO CALL REFRESH 🐹');
 
       // Only tick if the next tick comes after the retry threshold
       if (expiresInTicks <= Constants.autoRefreshTickThreshold) {
