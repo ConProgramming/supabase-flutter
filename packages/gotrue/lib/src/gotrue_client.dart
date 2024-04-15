@@ -1019,7 +1019,7 @@ class GoTrueClient {
   void stopAutoRefresh() {
     _autoRefreshTicker?.cancel();
     _autoRefreshTicker = null;
-    _autoRefreshOn = false
+    _autoRefreshOn = false;
   }
 
   Future<void> _autoRefreshTokenTick() async {
