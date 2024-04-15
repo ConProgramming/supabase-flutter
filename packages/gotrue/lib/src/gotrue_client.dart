@@ -1018,7 +1018,7 @@ class GoTrueClient {
   }
 
   Future<void> _autoRefreshTokenTick() async {
-    if (!_autoRefreshTicker.isActive) return;
+    if (_autoRefreshTicker != null && !_autoRefreshTicker.isActive) return;
     
     try {
       final now = DateTime.now();
