@@ -51,7 +51,7 @@ class GoTrueClient {
 
   late bool _autoRefreshToken;
 
-  bool _autoRefreshOn = true;
+  bool _tokenRefreshOn = true;
 
   Timer? _autoRefreshTicker;
 
@@ -999,14 +999,14 @@ class GoTrueClient {
     }
   }
 
-  void enableAutoRefresh() async {
-     print('🐹 ENABLED AUTO REFRESH 🐹');
-     _autoRefreshOn = true;
+  void enableTokenRefresh() async {
+     print('🐹 ENABLED TOKEN REFRESH 🐹');
+     _tokenRefreshOn = true;
   }
 
-  void disableAutoRefresh() async {
-     print('🐹 DISABLED AUTO REFRESH 🐹');
-     _autoRefreshOn = false;
+  void disableTokenRefresh() async {
+     print('🐹 DISABLED TOKEN REFRESH 🐹');
+     _tokenRefreshOn = false;
   }
 
   /// Starts an auto-refresh process in the background. Close to the time of expiration a process is started to
@@ -1030,9 +1030,7 @@ class GoTrueClient {
     _autoRefreshTicker = null;
   }
 
-  Future<void> _autoRefreshTokenTick() async {
-    if (!_autoRefreshOn) return;
-    
+  Future<void> _autoRefreshTokenTick() async {    
     try {
       final now = DateTime.now();
       final refreshToken = _currentSession?.refreshToken;
@@ -1160,6 +1158,10 @@ class GoTrueClient {
   /// To prevent multiple simultaneous requests it catches an already ongoing request by using the global [_refreshTokenCompleter].
   /// If that's not null and not completed it returns the future of the ongoing request.
   Future<AuthResponse> _callRefreshToken(String refreshToken) async {
+    if (!_tokenRefreshOn) {
+      return new AuthResponse(session: _currentSession, user: _currentUser);
+    }
+
     // Refreshing is already in progress
     if (_refreshTokenCompleter != null) {
       return _refreshTokenCompleter!.future;
