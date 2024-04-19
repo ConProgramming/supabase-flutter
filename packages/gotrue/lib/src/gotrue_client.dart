@@ -999,6 +999,14 @@ class GoTrueClient {
     }
   }
 
+  void enableAutoRefresh() async {
+     _autoRefreshOn = true;
+  }
+
+  void disableAutoRefresh() async {
+     _autoRefreshOn = false;
+  }
+
   /// Starts an auto-refresh process in the background. Close to the time of expiration a process is started to
   /// refresh the session. If refreshing fails it will be retried for as long as necessary.
   void startAutoRefresh() async {
@@ -1010,9 +1018,6 @@ class GoTrueClient {
       Constants.autoRefreshTickDuration,
       (Timer t) => _autoRefreshTokenTick(),
     );
-
-    _autoRefreshOn = true;
-
     await Future.delayed(Duration.zero);
     await _autoRefreshTokenTick();
   }
@@ -1021,9 +1026,6 @@ class GoTrueClient {
   void stopAutoRefresh() {
     _autoRefreshTicker?.cancel();
     _autoRefreshTicker = null;
-    _autoRefreshOn = false;
-
-    print('🐹 STOPPED AUTO REFRESH 🐹');
   }
 
   Future<void> _autoRefreshTokenTick() async {
