@@ -1000,10 +1000,12 @@ class GoTrueClient {
   }
 
   void enableAutoRefresh() async {
+     print('🐹 ENABLED AUTO REFRESH 🐹');
      _autoRefreshOn = true;
   }
 
   void disableAutoRefresh() async {
+     print('🐹 DISABLED AUTO REFRESH 🐹');
      _autoRefreshOn = false;
   }
 
