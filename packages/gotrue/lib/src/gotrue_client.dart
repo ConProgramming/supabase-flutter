@@ -1002,7 +1002,9 @@ class GoTrueClient {
   /// Starts an auto-refresh process in the background. Close to the time of expiration a process is started to
   /// refresh the session. If refreshing fails it will be retried for as long as necessary.
   void startAutoRefresh() async {
+    print('🐹 ABOUT TO START AUTO REFRESH 🐹');
     stopAutoRefresh();
+    print('🐹 NOW STARTING AUTO REFRESH 🐹');
 
     _autoRefreshTicker = Timer.periodic(
       Constants.autoRefreshTickDuration,
@@ -1020,6 +1022,8 @@ class GoTrueClient {
     _autoRefreshTicker?.cancel();
     _autoRefreshTicker = null;
     _autoRefreshOn = false;
+
+    print('🐹 STOPPED AUTO REFRESH 🐹');
   }
 
   Future<void> _autoRefreshTokenTick() async {
